@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#b5341a">
+<meta name="description" content="大阪黑門市場完整攻略：互動地圖、必吃美食、手信必買清單、半日行程與預算參考。">
+<link rel="icon" href="data:,">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%E9%BB%91%E9%96%80%E5%B8%82%E5%A0%B4%E6%94%BB%E7%95%A5%22%2C%22short_name%22%3A%22%E9%BB%91%E9%96%80%E6%94%BB%E7%95%A5%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23faf6ef%22%2C%22theme_color%22%3A%22%23b5341a%22%7D">
+<link rel="stylesheet" href="assets/hatch-maps.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>黑門市場攻略 Kuromon Market Guide</title>
+<style>
+:root{
+  --bg:#faf6ef; --surface:#ffffff; --surface2:#f3ecdf; --ink:#221c15; --muted:#6f6355; --line:#e3d9c8;
+  --red:#b5341a; --red-ink:#ffffff; --amber:#c07d12; --teal:#146c5d; --chip:#f7ead2;
+  --shadow:0 10px 30px rgba(60,35,10,.10); --radius:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#171310; --surface:#221c17; --surface2:#2a231c; --ink:#f2e9dc; --muted:#b8a892; --line:#3a3128; --red:#e05a36; --amber:#e0a83e; --teal:#3dbfa6; --chip:#33291d; --shadow:0 10px 30px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--red)}
+.serif{font-family:"Noto Serif TC",serif}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+/* hero */
+.hero{position:relative;color:#fff;overflow:hidden;background:#1c1410}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.72}
+.hero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,10,5,.25),rgba(20,10,5,.82) 78%)}
+.hero-inner{position:relative;padding:64px 0 30px}
+.hero .kicker{display:inline-block;background:var(--red);color:#fff;font-weight:700;font-size:13px;letter-spacing:.14em;padding:5px 12px;border-radius:999px}
+.hero h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(38px,7vw,64px);line-height:1.12;margin:16px 0 6px;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+.hero h1 .en{display:block;font-size:.42em;letter-spacing:.06em;font-weight:700;opacity:.92;margin-top:8px}
+.hero p.lede{max-width:620px;font-size:17px;color:#f5e9d6;margin:10px 0 20px}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{background:rgba(255,250,240,.14);border:1px solid rgba(255,250,240,.35);backdrop-filter:blur(4px);border-radius:12px;padding:8px 13px;font-size:14px;font-weight:500}
+.fact b{font-size:16px}
+/* nav */
+nav.tabs{position:sticky;top:0;z-index:40;background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.tabs a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:700;font-size:15px;padding:8px 14px;border-radius:999px}
+nav.tabs a:hover,nav.tabs a.on{background:var(--red);color:#fff}
+section{padding:44px 0 8px}
+h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(26px,4.5vw,36px);margin:0 0 4px;line-height:1.25}
+h2 .en{font-size:.55em;color:var(--muted);font-family:"Noto Sans TC",sans-serif;font-weight:700;letter-spacing:.04em;margin-left:8px}
+.sub{color:var(--muted);margin:0 0 22px;max-width:720px}
+/* map */
+.map-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:start}
+#map{height:440px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--surface2)}
+.map-fallback{display:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.places{display:flex;flex-direction:column;gap:10px}
+.place{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit}
+.place:hover{border-color:var(--red)}
+.place.map-selected{border-color:var(--red);box-shadow:0 0 0 2px color-mix(in srgb, var(--red) 35%, transparent)}
+.place h3{margin:0 0 2px;font-size:16px;display:flex;gap:9px;align-items:baseline}
+.place p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.place .dir{display:inline-block;margin-top:8px;font-size:13.5px;font-weight:700;text-decoration:none}
+.pin{width:28px;height:28px;border-radius:50%;background:#b5341a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.pin--on{background:#c07d12;transform:scale(1.2)}
+.num{display:inline-flex;flex:none;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:13px;font-weight:900;align-items:center;justify-content:center;transform:translateY(3px)}
+/* cards */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.filters button{font:inherit;font-weight:700;font-size:14.5px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.filters button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.card img{height:190px;width:100%;object-fit:cover}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{margin:0;font-size:19px;font-family:"Noto Serif TC",serif;font-weight:700}
+.card h3 .jp{font-size:13px;color:var(--muted);font-family:"Noto Sans TC",sans-serif;font-weight:500}
+.card p{margin:0;color:var(--muted);font-size:14.5px;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--ink)}
+.tag.price{background:color-mix(in srgb, var(--teal) 15%, var(--surface));color:var(--teal)}
+.tag.must{background:var(--red);color:#fff}
+.rank{position:relative}
+.rank i{position:absolute;top:12px;left:12px;font-style:normal;background:rgba(20,12,6,.82);color:#ffd98a;font-weight:900;font-size:13px;padding:4px 10px;border-radius:999px;letter-spacing:.05em}
+/* souvenirs */
+.souv{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.souv-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px}
+.souv-card h3{font-family:"Noto Serif TC",serif;margin:0 0 4px;font-size:20px}
+.souv-card .why{color:var(--muted);font-size:14.5px;margin:0 0 12px}
+ul.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+ul.check li{display:flex;gap:10px;font-size:15px;align-items:flex-start}
+ul.check li::before{content:"✓";flex:none;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb, var(--teal) 18%, var(--surface));color:var(--teal);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+ul.check b{font-weight:700}
+ul.check span{color:var(--muted);font-size:13.5px;display:block}
+.warn{background:color-mix(in srgb, var(--amber) 12%, var(--surface));border:1px solid color-mix(in srgb, var(--amber) 45%, var(--line));border-radius:14px;padding:14px 18px;font-size:14.5px;margin-top:16px}
+/* itinerary + budget */
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.panel h3{font-family:"Noto Serif TC",serif;margin:0 0 14px;font-size:20px}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ol.steps li{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line)}
+ol.steps li:last-child{border-bottom:0}
+ol.steps time{font-weight:900;color:var(--red);font-size:15px}
+ol.steps b{display:block;font-size:15.5px}
+ol.steps p{margin:0;color:var(--muted);font-size:14px}
+.budget label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14.5px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.budget input{width:74px;font:inherit;padding:6px 8px;border:1.5px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);text-align:right}
+.budget .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-weight:900;font-size:17px}
+.budget .total output{font-size:26px;color:var(--red);font-family:"Noto Serif TC",serif}
+.budget .note{color:var(--muted);font-size:13px;margin:6px 0 0}
+.tips{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tip{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tip b{display:block;font-size:16px;margin-bottom:3px}
+.tip p{margin:0;color:var(--muted);font-size:14.5px}
+footer{margin-top:48px;border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);font-size:13.5px}
+footer a{font-weight:700}
+@media (max-width:860px){
+  .map-grid,.two,.souv{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr 1fr}
+  #map{height:340px}
+  .tips{grid-template-columns:1fr}
+}
+@media (max-width:540px){ .grid{grid-template-columns:1fr} .hero-inner{padding-top:44px} }
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img class="bg" src="assets/market2.jpg" alt="黑門市場內現烤海鮮串燒攤，師傅即場燒烤大蝦、扇貝與魷魚">
+  <div class="scrim"></div>
+  <div class="wrap hero-inner">
+    <span class="kicker">大阪 · 日本橋</span>
+    <h1>黑門市場攻略<span class="en">KUROMON ICHIBA MARKET · OSAKA</span></h1>
+    <p class="lede">有 190 多年歷史的「大阪廚房」——580 米長的拱廊裡擠滿約 150 間海鮮、和牛、水果與小吃店。這頁集齊地圖、必吃排名、手信清單與半日食法，落車即用。</p>
+    <div class="facts">
+      <div class="fact">🕘 營業 <b>9:00–17:00</b>（各店不同）</div>
+      <div class="fact">🚇 日本橋站 <b>10 號出口</b> 步行 1 分鐘</div>
+      <div class="fact">📏 全長 <b>約 580 米</b> · 約 150 店</div>
+      <div class="fact">⏰ 黃金時段 <b>平日 9:00–11:00</b></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="頁面導覽">
+  <div class="wrap">
+    <a href="#map-sec">🗺 地圖交通</a>
+    <a href="#food">🦪 必吃美食</a>
+    <a href="#souvenir">🎁 手信必買</a>
+    <a href="#plan">🗓 半日行程＋預算</a>
+    <a href="#tips">💡 實用貼士</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="map-sec">
+  <h2>地圖與交通<span class="en">MAP &amp; ACCESS</span></h2>
+  <p class="sub">市場沿日本橋筋商店街南北延伸，北端貼近日本橋站，南端向難波方向走。點選右邊地點，地圖會同步定位；每張卡都有「前往導航」可直接開 Google Maps 帶路。</p>
+  <div class="map-grid">
+    <div>
+      <div id="map" role="img" aria-label="黑門市場及周邊地點互動地圖"></div>
+      <div class="map-fallback" id="mapFallback">
+        <b>地圖未能載入</b> — 你仍然可以用右邊每個地點的「前往導航」連結，或者直接搜尋「Kuromon Ichiba Market, 2 Chome-4-1 Nipponbashi, Osaka」。
+      </div>
+    </div>
+    <div class="places" id="placeList"></div>
+  </div>
+  <div class="warn">🚃 <b>最簡單去法：</b>乘大阪地鐵堺筋線或千日前線到 <b>日本橋站（Nippombashi）</b>，由 <b>10 號出口</b>上地面，市場北入口就在 1–2 分鐘腳程。由難波站步行約 8–10 分鐘、道頓堀約 10 分鐘，食完可以順路散步過去。</div>
+</section>
+
+<section id="food">
+  <h2>必吃美食<span class="en">BEST FOOD — RANKED</span></h2>
+  <p class="sub">黑門的玩法是「邊行邊食」：先由北到南行完整條街睇價，再回頭下手。以下按值得專程一試的程度排序，價錢是現場常見參考價（日圓），實際以店舖標價為準。</p>
+  <div class="filters" role="group" aria-label="美食分類篩選">
+    <button class="on" data-f="all">全部</button>
+    <button data-f="seafood">海鮮刺身</button>
+    <button data-f="grill">串燒燒物</button>
+    <button data-f="snack">小食</button>
+    <button data-f="sweet">甜品水果</button>
+  </div>
+  <div class="grid" id="foodGrid"></div>
+</section>
+
+<section id="souvenir">
+  <h2>手信必買<span class="en">SOUVENIR MUST-HAVES</span></h2>
+  <p class="sub">黑門不只是食街，也是大阪人辦年貨的地方。乾貨和調味料輕、平、易帶，是手信首選；生鮮類則要留意入境規定。</p>
+  <div class="souv">
+    <div class="souv-card">
+      <h3>🥇 第一梯隊 · 幾乎必買</h3>
+      <p class="why">輕便、保質期長、送禮得體，回港／回台也容易過關。</p>
+      <ul class="check">
+        <li><div><b>乾貝（干し貝柱）</b><span>煲湯、煮粥、蒸水蛋即刻升呢；市場內老字號乾貨舖品質穩定，按大小分級，細粒裝最抵買。</span></div></li>
+        <li><div><b>昆布與鰹魚高湯包</b><span>大阪家庭的廚房基本功，一包在手，烏冬、味噌湯、茶碗蒸都像樣。</span></div></li>
+        <li><div><b>柚子胡椒、七味粉等調味料</b><span>小樽小瓶、價錢親民，最適合大量派同事朋友。</span></div></li>
+        <li><div><b>黑門限定包裝零食</b><span>海鮮仙貝、蝦餅、章魚燒造型點心，包裝有「大阪黑門」字樣，辨識度最高。</span></div></li>
+      </ul>
+    </div>
+    <div class="souv-card">
+      <h3>🎁 第二梯隊 · 進階之選</h3>
+      <p class="why">較重或要冷藏，適合行李有位、或買給最親近的人。</p>
+      <ul class="check">
+        <li><div><b>真空包裝漬物與佃煮</b><span>昆布佃煮、小魚乾等下飯小菜，常溫可帶，配白飯一流。</span></div></li>
+        <li><div><b>紀州梅干</b><span>和歌山名產，酸度分級清楚，買細盒裝送長輩最穩陣。</span></div></li>
+        <li><div><b>高級水果（即日食）</b><span>白草莓、蜜瓜只宜在大阪即買即食，當「手信給自己」。</span></div></li>
+        <li><div><b>日本酒小瓶裝</b><span>市場周邊酒舖有大阪地酒，注意托運與入境免稅額。</span></div></li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn">⚠️ <b>入境提醒：</b>生肉（含和牛）、新鮮水果、未加工海產在很多國家／地區禁止或限制攜帶入境，出發前先查目的地海關規定；乾貨、調味料、包裝零食一般最安全。市場部分乾貨舖提供真空包裝與免稅（出示護照），買大額時記得問。</div>
+</section>
+
+<section id="plan">
+  <h2>半日行程 ＋ 預算試算<span class="en">HALF-DAY PLAN &amp; BUDGET</span></h2>
+  <p class="sub">黑門最佳節奏是早上到、午前食完主菜，午後轉戰道頓堀與心齋橋。右邊可改數量，即時計出今餐大約要帶多少現金。</p>
+  <div class="two">
+    <div class="panel">
+      <h3>🗓 建議走法（約 3.5 小時）</h3>
+      <ol class="steps">
+        <li><time>09:00</time><div><b>日本橋站 10 號出口出發</b><p>趁人潮未到，先影北入口的黑門招牌，再由北向南行完整條街，只睇不買。</p></div></li>
+        <li><time>09:30</time><div><b>海鮮刺身開局</b><p>生蠔、海膽、吞拿魚腩最講新鮮，早上品質最好，在原路回頭時第一批下手。</p></div></li>
+        <li><time>10:30</time><div><b>串燒與小食主場</b><p>現烤扇貝、和牛串、章魚燒、玉子燒串輪住食，兩人分食可以試多幾款。</p></div></li>
+        <li><time>11:30</time><div><b>水果甜品收尾 ＋ 買手信</b><p>白草莓或現榨果汁作結，順路在乾貨舖買乾貝與高湯包。</p></div></li>
+        <li><time>12:15</time><div><b>步行去道頓堀</b><p>約 10 分鐘到固力果招牌，午餐與購物在心齋橋一帶接力。</p></div></li>
+      </ol>
+    </div>
+    <div class="panel budget">
+      <h3>🧮 邊食邊買預算（每人）</h3>
+      <div id="budgetRows"></div>
+      <div class="total"><span>預計總額</span><output id="budgetTotal">¥0</output></div>
+      <p class="note">以中位價估算；不少攤位只收現金，建議每人帶 ¥8,000–10,000 現金再加一張卡傍身。改數量即時重算。</p>
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <h2>實用貼士<span class="en">GOOD TO KNOW</span></h2>
+  <div class="tips">
+    <div class="tip"><b>💴 多帶現金</b><p>小攤多數只收現金，而且邊行邊食花費累積得很快；市場周邊有便利店 ATM 可提款。</p></div>
+    <div class="tip"><b>🔁 先行一圈再下手</b><p>同類品項沿街重複出現，越近北入口通常越貴；行完整條街再回頭買，平均可省一兩成。</p></div>
+    <div class="tip"><b>🪑 找位坐低食</b><p>市場內設有遊客資訊中心與休息區（附洗手間），買完食物可以坐低慢慢食，不用全程企食。</p></div>
+    <div class="tip"><b>🕐 別太晚到</b><p>下午 3 點後陸續收攤、選擇明顯變少；週末與日本黃金週人潮最擠，能平日早上來最好。</p></div>
+    <div class="tip"><b>🦪 海鮮點餐小訣竅</b><p>指住想要的件數與大小即可，很多店員懂簡單英文與中文；海膽、生蠔可先問產地與當日推介。</p></div>
+    <div class="tip"><b>🧊 保冷安排</b><p>打算買生鮮回酒店食，記得自備或即場買保冷袋；夏天高溫下不要讓刺身在袋裡放超過一小時。</p></div>
+  </div>
+  <img src="assets/market3.jpg" alt="黑門市場燒海鮮攤：烤扇貝、帶子串與魷魚鬚小八爪魚串" style="width:100%;height:300px;object-fit:cover;border-radius:18px;margin-top:18px" loading="lazy">
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    資料：黑門市場官方網站 <a href="https://kuromon.com/jp/" target="_blank" rel="noopener">kuromon.com</a> · 地址：大阪市中央區日本橋 2-4-1 · 電話 +81 6-6631-0007 · 營業時間與價格以店舖現場為準，出發前建議再確認。<br>
+    地圖地點經地點資料庫核實座標；「前往導航」會開啟 Google Maps。
+  </div>
+</footer>
+
+<script src="assets/hatch-maps.js"></script>
+<script src="assets/map_helpers.js"></script>
+<script>
+var PLACES = [
+  { label:"黑門市場（主街中心）", venue:"Kuromon Ichiba Market", address:"2 Chome-4-1 Nipponbashi", locality:"大阪市中央区", region:"大阪府", country:"JP", lat:34.665371, lng:135.506286,
+    desc:"市場心臟地帶：海鮮、乾貨、水果店最密集的一段，先在這裡感受氣氛。" },
+  { label:"日本橋站 · 10 號出口", venue:"Nippombashi Station", address:"1-chome-5 Nipponbashi", locality:"大阪市中央区", region:"大阪府", country:"JP", lat:34.666933, lng:135.506210,
+    desc:"地鐵堺筋線／千日前線，出站步行 1–2 分鐘到市場北入口，最方便的起點。" },
+  { label:"道頓堀", venue:"Dotonbori", address:"1 Chome Dotonbori", locality:"大阪市中央区", region:"大阪府", country:"JP", lat:34.668720, lng:135.501389,
+    desc:"食完市場步行約 10 分鐘，運河兩岸食肆與霓虹招牌，適合接午餐與散步。" },
+  { label:"固力果跑跑人招牌", venue:"Glico Sign Dotonbori", address:"1 Chome-10-3 Dotonbori", locality:"大阪市中央区", region:"大阪府", country:"JP", lat:34.668934, lng:135.501072,
+    desc:"戎橋上的大阪地標打卡位，由道頓堀沿運河西行即達，順路去心齋橋購物。" }
+];
+
+var placeList = document.getElementById('placeList');
+PLACES.forEach(function(p, i){
+  var el = document.createElement('div');
+  el.className = 'place'; el.setAttribute('role','button'); el.setAttribute('tabindex','0');
+  el.innerHTML = '<h3><span class="num">'+(i+1)+'</span>'+p.label+'</h3><p>'+p.desc+'</p>';
+  var a = document.createElement('a');
+  a.className = 'dir'; a.textContent = '↗ 前往導航 Directions';
+  a.target = '_blank'; a.rel = 'noopener';
+  a.href = MapHelpers.mapsDirectionsUrl(p, { travelmode:'walking' }) || '#';
+  a.addEventListener('click', function(e){ e.stopPropagation(); });
+  el.appendChild(a);
+  placeList.appendChild(el);
+});
+var rows = Array.prototype.slice.call(placeList.children);
+function showPlaceList(){
+  document.getElementById('map').style.display = 'none';
+  document.getElementById('mapFallback').style.display = 'block';
+}
+try {
+  MapHelpers.mountPlaceListMap(document.getElementById('map'), { places: PLACES, rows: rows, baseStyle:'light' }, showPlaceList);
+} catch(e){ showPlaceList(); }
+
+/* ---------- Food ---------- */
+var FOODS = [
+  { name:"生蠔 · 海膽 · 刺身拼盤", jp:"生ガキ・ウニ・刺身", cat:"seafood", img:"assets/uni.jpg", alt:"黑門市場海鮮攤的生蠔、海膽與三文魚刺身",
+    text:"黑門的招牌畫面：即開生蠔肥美creamy、海膽放在原殼上鮮甜無腥、刺身每碟 ¥500 起。在冰檯前指件即食，新鮮度無得輸。", price:"¥500–1,500", must:true },
+  { name:"吞拿魚腩壽司・海鮮丼", jp:"トロ寿司・海鮮丼", cat:"seafood", img:"assets/hero.jpg", alt:"黑門市場內的吞拿魚壽司店「黑銀」店面",
+    text:"魚檔即切即握，大拖羅入口即溶。想坐低食一餐，海鮮丼與壽司套餐是市場內最穩陣的正餐選擇。", price:"¥2,500–3,500", must:true },
+  { name:"現烤海鮮串（扇貝・大蝦・蟹腳）", jp:"炉端焼き串", cat:"grill", img:"assets/market2.jpg", alt:"師傅即場炭燒海鮮串燒：大蝦、扇貝、魷魚與魚串",
+    text:"炭火香氣傳遍整條街：牛油燒扇貝、鹽燒大蝦、雪蟹腳，睇住師傅即燒即遞到手，熱辣辣最過癮。", price:"¥880–1,500", must:true },
+  { name:"和牛串燒", jp:"和牛串焼き", cat:"grill", img:"assets/wagyu.jpg", alt:"厚切和牛串燒上碟，表面微焦、肉汁豐富",
+    text:"厚切和牛粒只以鹽調味，入口油脂甘香。價格有觀光溢價，當作一次豪華體驗，揀肉色與油花靚的店。", price:"約 ¥1,000／串", must:false },
+  { name:"章魚燒", jp:"たこ焼き", cat:"snack", img:"assets/takoyaki.jpg", alt:"一盒章魚燒，面層鋪滿木魚碎、醬汁與沙律醬",
+    text:"大阪的靈魂小食：外脆內流心、章魚粒足料。黑門的價錢算公道，趁熱食小心燙口。", price:"¥500–600／6 粒", must:true },
+  { name:"玉子燒串", jp:"玉子焼き串", cat:"snack", img:"assets/tamago.jpg", alt:"手持一串厚身玉子燒，層次分明",
+    text:"微甜高湯玉子燒，厚身多汁、蛋香濃，在地人都會買。一串落肚不佔胃，是邊行邊食的完美間場。", price:"約 ¥300–400", must:false },
+  { name:"白草莓・蜜瓜・現榨果汁", jp:"白いちご・メロン", cat:"sweet", img:"assets/fruit.jpg", alt:"水果檔整齊排列的紅白草莓禮盒，標價 ¥1,490 起",
+    text:"日本水果的展示場：白草莓香氣像菠蘿、蜜瓜甜到起沙。貴，但品質是超市買不到的級數，適合兩人分享。", price:"¥1,490 起／盒", must:false }
+];
+var grid = document.getElementById('foodGrid');
+function renderFood(f){
+  grid.innerHTML = '';
+  FOODS.forEach(function(item, idx){
+    if (f !== 'all' && item.cat !== f) return;
+    var c = document.createElement('article'); c.className = 'card rank';
+    c.innerHTML = '<i>NO.'+(idx+1)+'</i><img src="'+item.img+'" alt="'+item.alt+'" loading="lazy">' +
+      '<div class="body"><h3>'+item.name+' <span class="jp">'+item.jp+'</span></h3><p>'+item.text+'</p>' +
+      '<div class="meta">'+(item.must?'<span class="tag must">必試 MUST TRY</span>':'')+'<span class="tag price">'+item.price+'</span></div></div>';
+    grid.appendChild(c);
+  });
+}
+renderFood('all');
+document.querySelectorAll('.filters button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.filters button').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on'); renderFood(b.dataset.f);
+  });
+});
+
+/* ---------- Budget ---------- */
+var BUDGET = [
+  { label:"生蠔／海膽／刺身", unit:800, qty:1 },
+  { label:"現烤海鮮串", unit:1000, qty:1 },
+  { label:"和牛串燒", unit:1000, qty:1 },
+  { label:"章魚燒（6 粒）", unit:550, qty:1 },
+  { label:"玉子燒串", unit:350, qty:1 },
+  { label:"水果／果汁", unit:800, qty:1 },
+  { label:"手信（乾貝＋高湯包）", unit:3000, qty:1 }
+];
+var brows = document.getElementById('budgetRows');
+BUDGET.forEach(function(b, i){
+  var l = document.createElement('label');
+  l.innerHTML = '<span>'+b.label+'<br><small style="color:var(--muted)">約 ¥'+b.unit.toLocaleString()+'／份</small></span>';
+  var inp = document.createElement('input');
+  inp.type = 'number'; inp.min = '0'; inp.max = '20'; inp.value = b.qty; inp.dataset.i = i;
+  inp.setAttribute('aria-label', b.label + ' 數量');
+  inp.addEventListener('input', calc);
+  l.appendChild(inp); brows.appendChild(l);
+});
+function calc(){
+  var total = 0;
+  brows.querySelectorAll('input').forEach(function(inp){
+    var q = Math.max(0, parseInt(inp.value || '0', 10) || 0);
+    total += q * BUDGET[+inp.dataset.i].unit;
+  });
+  document.getElementById('budgetTotal').textContent = '¥' + total.toLocaleString();
+}
+calc();
+
+/* nav highlight */
+var links = document.querySelectorAll('nav.tabs a');
+var secs = ['map-sec','food','souvenir','plan','tips'];
+window.addEventListener('scroll', function(){
+  var cur = secs[0];
+  secs.forEach(function(id){ var el = document.getElementById(id); if (el && el.getBoundingClientRect().top < 160) cur = id; });
+  links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href') === '#' + cur || ('#'+cur)==='#map-sec' && a.getAttribute('href')==='#map-sec'); });
+}, { passive:true });
+</script>
+</body>
+</html>
